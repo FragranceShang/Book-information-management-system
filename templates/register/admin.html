@@ -1,0 +1,73 @@
+{% extends 'home.html' %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head> 
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block header %}
+        <h1>{% block title %}管理员{% endblock %}</h1>
+        {% if g.is_super  %}
+            <a class="action" href="{{ url_for('register.signin') }}">新增</a>
+        {% endif %}
+    {% endblock %}
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='img/main.png') }}");
+            background-size: cover; /* 确保图片覆盖整个页面 */
+            /* 其他背景样式属性，如背景颜色、平铺方式等，根据需要添加 */
+        }
+    </style>
+</head>
+<body> 
+    <h1>系统用户登录页</h1> 
+    <hr>
+    <p style="font-size: 24px;color:pink;">欢迎登录！</p>
+    <p style="font-size: 24px;"><a href="/ "><b>回到首页</b></a></p> 
+    {% block content %}
+    <table width="900px" height="100px">
+      <tr>
+        <th>管理员ID</th>
+        <th>用户名</th>
+        <th>真名</th>
+        <th>性别</th>
+        <th>年龄</th>
+        <th>超级管理员</th>
+        <th>&nbsp;</th>
+      </tr>
+    {% if g.is_super  %}
+        {% for post in posts %}
+            <article class="post">
+            <header>
+            <tr>
+                <th>{{ post['uid'] }}</th>
+                <th>{{ post['username'] }}</th>
+                <th>{{ post['uname'] }}</th>
+                <th>{{ post['sex'] }}</th>
+                <th>{{ post['age'] }}</th>
+                <th>{{ post['super'] }}</th>
+                <th><a class="action" href="{{ url_for('register.update', id=post['uid']) }}">更改</a></th>
+                <th><a class="action" href="{{ url_for('register.delete', id=post['uid']) }}">删除</a></th>
+            </tr>
+            </header>
+        </article>
+        {% endfor %}
+    {% else %}
+    <article class="post">
+        <header>
+        <tr>
+            <th>{{ own['uid'] }}</th>
+            <th>{{ own['username'] }}</th>
+            <th>{{ own['uname'] }}</th>
+            <th>{{ own['sex'] }}</th>
+            <th>{{ own['age'] }}</th>
+            <th>{{ own['super'] }}</th>
+            <th><a class="action" href="{{ url_for('register.update', id=own['uid']) }}">更改</a></th>
+            <th><a class="action" href="{{ url_for('register.delete', id=own['uid']) }}">删除</a></th>
+        </tr>
+        </header>
+    </article>
+    {% endif %}
+    </table>
+  {% endblock %}
+</body>  
+</html>

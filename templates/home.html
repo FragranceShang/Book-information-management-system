@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head> 
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}图书销售管理系统主页{% endblock %}</title> 
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='img/main.png') }}");
+            background-size: cover; /* 确保图片覆盖整个页面 */
+            /* 其他背景样式属性，如背景颜色、平铺方式等，根据需要添加 */
+        }
+    </style>
+</head>
+<body> 
+    <nav>
+        <h1>图书销售管理系统</h1> 
+        <ul>
+            <li><a href="{{ url_for('home') }}" style="font-size: 24px;color:rgb(247, 7, 199);">首页</a></li>
+            <li><a href="{{ url_for('book.index') }}" style="font-size: 24px;color:rgb(242, 2, 194);">书籍查询</a></li>
+            {% if g.user  %}
+                {% if g.is_admin %}
+                    <li style="font-size: 24px;color:rgb(214, 0, 252);"><span>{{ g.user['username'] }}</span></li>
+                    {% if g.is_super %}
+                        <li><a href="{{ url_for('register.admin', id=g.user['uid']) }}" style="font-size: 24px;color:rgb(255, 1, 196);">超级管理员</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('register.admin', id=g.user['uid']) }}" style="font-size: 24px;color:pink;">个人资料</a></li>
+                    {% endif %}
+                {% endif %}
+                <li><a href="{{ url_for('register.logout') }}" style="font-size: 24px;color:pink;">登出</a></li>
+            {% else %} 
+                <li><a href="{{ url_for('register.login') }}" style="font-size: 24px;color:pink;">登陆</a></li>
+                <li><a href="/signin" style="font-size: 24px;color:pink;">注册</a>
+            {% endif %}
+        </ul>
+<hr>
+
+    </nav>
+    <p style="font-size: 24px;color:pink;"><b>欢迎{{ g.user['uname'] }}登录！</b></p> 
+    
+<section class="content">
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </section>
+</body>  
+</html>

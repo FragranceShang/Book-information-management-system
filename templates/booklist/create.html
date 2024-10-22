@@ -1,0 +1,48 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}进货{% endblock %}</h1>
+  <a class="action" href="{{ url_for('book.purchase_list') }}"style="font-size: 24px;color:pink;">进货清单</a>
+  {% if g.user['super']== True %}
+    <a class="action" href="{{ url_for('book.bill') }}"style="font-size: 24px;color:pink;">账单</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<form>
+  <input type="checkbox" id="checkbox" name="option" onchange="toggleValue()">
+  <label for="checkbox">书籍是否存在</label><br>
+  
+</form>
+  <form method="post">
+
+    {% if book == 0 %}
+    <label for="bid">书籍ID</label>
+    <input type="number" min="0" name="bid" id="bid" value="{{ request.form['bid'] }}" required>
+    <input type="number" min="1" name="isbn" id="isbn" value="{{ request.form['isbn'] }}" hidden>
+    <input type="text" name="bname" id="bookname" value="{{ request.form['bname'] }}" hidden>
+    <input type="text" name="author" id="author" value="{{ request.form['author'] }}" hidden>
+    <input type="text" name="publisher" id="publisher" value="{{ request.form['publisher'] }}" hidden>
+    <input type="number" step="0.01" min="0" name="outprice" id="outprice" value="{{ request.form['outprice'] }}" hidden>
+    {% else %}
+    <h1>书籍不存在，首次进货请补充书籍信息</h1>
+    <label for="bid">书籍ID</label>
+    <input type="number" min="0" name="bid" id="bid" value="{{ request.form['bid'] }}"  hidden>
+    <label for="isbn">ISBN</label>
+    <input type="number" min="1" name="isbn" id="isbn" value="{{ request.form['isbn'] }}" required>
+    <label for="bookname">书名</label>
+    <input type="text" name="bname" id="bookname" value="{{ request.form['bname'] }}" required>
+    <label for="author">作者</label>
+    <input type="text" name="author" id="author" value="{{ request.form['author'] }}" required>
+    <label for="publisher">出版商</label>
+    <input type="text" name="press" id="publisher" value="{{ request.form['publisher'] }}" required>
+    <label for="outprice">出售价格</label>
+    <input type="number" step="0.01" min="0" name="outprice" id="outprice" value="{{ request.form['outprice'] }}" required>
+    {% endif %}
+    <label for="price">进货价格</label>
+    <input type="number" step="0.01" min="0" name="inprice" id="price" value="{{ request.form['inprice'] }}" required>
+    <label for="amount">进货数量</label>
+    <input type="number" min="1" name="amount" id="amount" value="{{ request.form['amount'] }}" required>
+    <input type="submit" value="提交" onclick="return confirm('确认提交');">
+  </form>
+{% endblock %}

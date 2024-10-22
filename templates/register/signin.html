@@ -1,0 +1,27 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}管理员注册{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+  <label for="username" align="center">用户名</label>
+  <input type="text" name="nm" id="username" required>
+  <label for="password" align="center">密码</label>
+  <input type="password" name="pwd" id="password" required>
+  <label type="text" for="realname" align="center">真实姓名</label>
+  <input name="realname" id="realname" required>
+  <label for="sex" align="center">性别</label>
+  <select name="sex" id="sex" >
+  <div class="select-wrapper">
+  <option value="unknown">未知</option>
+  <option value="male">男</option>
+  <option value="female">女</option>
+  </select>
+</div>
+  <label for="age" align="center">年龄</label>
+  <input type="number" name="age" id="age" min="1" required>
+  <input type="submit" value="注册" onclick="return confirm('确认提交');">
+</form>
+{% endblock %}

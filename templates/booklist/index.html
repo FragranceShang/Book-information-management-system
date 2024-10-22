@@ -1,0 +1,95 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}图书{% endblock %}</h1>
+  {% if g.is_admin %}
+    <a class="action" href="{{ url_for('book.create') }}" style="font-size: 24px;color:pink;">进货</a>
+    <a class="action" href="{{ url_for('book.purchase_list') }}" style="font-size: 24px;color:pink;">进货清单</a>
+    {% if g.user['super']== True %}
+      <a class="action" href="{{ url_for('book.bill') }}"style="font-size: 24px;color:pink;">账单</a>
+    {% endif %}
+  {% endif %}
+  
+{% endblock %}
+
+
+
+{% block content %}
+  <div class="container">
+    <form action="{{ url_for('book.search', type='type', search='search') }}" method="post" class="parent">
+        <select name="type" class="select">
+          {% if type %}
+          <option value="{{type}}" selected hidden>{{type}}</option>
+          {% endif %}
+          <option value="ID">ID</option>
+          <option value="ISBN">ISBN</option>
+          <option value="书名">书名</option>
+          <option value="作者名">作者名</option>
+          <option value="出版社">出版社</option>
+        </select>
+        <input type="text" name="search" class="search" placeholder="搜索" value="{{ search }}">
+        <input type="image" src="/static/img/search.png" alt="Submit" class="btn" style="width: 15px; height: 15px;">
+    </form>
+  </div>
+  <table width="900px" height="100px">
+    <tr>
+      {% if g.user %}
+        <th>ID</th>
+        <th>ISBN</th>
+        <th>书名</th>
+        <th>作者</th>
+        <th>出版社</th>
+        <th>价格</th>
+        <th>库存量</th>
+        <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+      {% endif %}
+    </tr>
+    {% for j in range(2*(i-1), 2*i) %}
+    {% if j < num_books %}
+    <article class="post">
+      <header>
+        <tr>
+          {% if g.user %}
+          <div>
+            <th>{{ posts[j]['bid'] }}</th>
+            <th>{{ posts[j]['isbn'] }}</th>
+            <th>{{ posts[j]['bname'] }}</th>
+            <th>{{ posts[j]['author'] }}</th>
+            <th>{{ posts[j]['press'] }}</th>
+            <th>{{ posts[j]['price'] }}</th>
+            <th>{{ posts[j]['amount'] }}</th>
+          </div>
+          {% if g.is_admin %}
+            <th><a class="action" href="{{ url_for('book.update', id=posts[j]['bid']) }}">更改</a></th>
+            <th><a class="action" href="{{ url_for('book.create', book=0) }}">进货</a></th>
+          {% endif %}
+          {% if posts[j]['amount']==0 %}
+            <th><p>已售罄</p></th>
+          {% else %}
+          <form action="{{ url_for('book.purchase', id=posts[j]['bid'], amount='amount') }}" method="post">
+            <th><input type="hidden" name="bid" value="{{ posts[j]['bid'] }}">
+                <input type="number" name="amount" value="{{ amount }}" required>
+                <input type="submit" value="购买" onclick="return confirm('确认购买');"></input>
+            </th>
+          </form>
+          {% endif %}
+          {% endif %}
+        </tr>
+      </header>
+    </article>
+    {% endif %}
+  {% endfor %}
+  </table>
+  {% if g.user %}
+  <form method="post">
+  {% if num_books > 0 %}
+    <label for="page-input" align="center" style="margin-top: 100px;">当前页数是{{i}},最大页数是{{(num_books-1)//2+1}},跳转到页数:</label>
+    <input type="number" name="page" id="page" min="1" value="{{ current_page }}" class="page-input" />
+    <input type="submit" value="跳转">
+  {% endif %}
+  {% endif %}
+  </form>
+{% endblock %}

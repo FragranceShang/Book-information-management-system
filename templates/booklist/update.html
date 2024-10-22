@@ -1,0 +1,25 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}书籍资料{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="bid">书籍ID</label>
+    <input type="number" min="1" name="bid" id="bid" value="{{ book['bid'] }}" disabled>
+    <label for="isbn">ISBN</label>
+    <input type="text" name="isbn" id="isbn" value="{{ book['isbn'] }}" required>
+    <label for="bookname">书名</label>
+    <input type="text" name="bname" id="bookname" value="{{ book['bname'] }}" required>
+    <label for="author">作者</label>
+    <input type="text" name="author" id="author" value="{{ book['author'] }}" required>
+    <label for="publisher">出版商</label>
+    <input type="text" name="publisher" id="publisher" value="{{ book['press'] }}" required>
+    <label for="price">出售价格</label>
+    <input type="number" step="0.01" min="0" name="price" id="price" value="{{ book['price'] }}" required>
+    <label for="price">数量</label>
+    <input type="number" step="1" min="0" name="amount" id="amounte" value="{{ book['amount'] }}" required>
+    <input type="submit" value="保存" onclick="return confirm('确认保存');">
+  </form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}个人资料{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="username">用户名</label>
+    <input type="text" name="username" id="username" value="{{post['username'] }}" required>
+    <label for="password">新密码（为空表示不修改）</label>
+    <input type="password" name="password" id="password">
+    <label for="realname">真实姓名</label>
+    <input type="text" name="realname" id="realname" value="{{post['uname'] }}" required>
+    <label for="sex">性别</label>
+    <select name="sex">
+    <option value="{{post['sex']}}" select hidden>{{post['sex']}}</option>
+    <option value="male">男</option>
+    <option value="female">女</option>
+    </select>
+    <!-- <input name="gender" id="gender" value="{{post['gender'] }}" required> -->
+    <label for="age">年龄</label>
+    <input type="number" name="age" id="age" min="1" value="{{post['age'] }}" required>
+    <input type="submit" value="保存" onclick="return confirm('确认保存');">
+  </form>
+{% endblock %}

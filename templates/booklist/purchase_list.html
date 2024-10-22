@@ -1,0 +1,48 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}进货清单{% endblock %}</h1>
+  <a class="action" href="{{ url_for('book.create') }}" style="font-size: 24px;color:pink;">进货</a>
+  {% if g.user['super']== True %}
+  <a class="action" href="{{ url_for('book.bill') }}" style="font-size: 24px;color:pink;">账单</a>
+  {% endif %}
+{% endblock %}
+
+
+
+{% block content %}
+  <table width="900px" height="100px">
+    <tr>
+      <th>书籍ID</th>
+      <th>进货数量</th>
+      <th>进货价格</th>
+      <th>总额</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+    </tr>
+  {% for post in posts %}
+    <article class="post">
+      <header>
+        <tr>
+          <th>{{ post['bid'] }}</th>
+          <th>{{ post['amount'] }}</th>
+          <th>￥{{ post['price'] }}</th>
+          <th>￥{{ (post['price'] | float) *post['amount'] }}</th>
+        
+        {% if post['state']=='unpaid' %}
+            <th><a class="action" href="{{ url_for('book.paybill', id=post['pid']) }}" onclick="return confirm('确认付款');">付款</a></th>
+            <th><a class="action" href="{{ url_for('book.refund', id=post['pid']) }}" onclick="return confirm('确认退货');">退货</a></th>
+        {% elif post['state']=='refund' %}
+            <th><p class="action" >已退货 </p></th>
+        {% elif post['state']=='paid' %}
+            <th><p class="action" >已付款 </p></th>
+            <th><a class="action" href="{{ url_for('book.bookreach', id=post['pid']) }}" onclick="return confirm('确认入库');">入库</a></th>
+        {% elif post['state']=='reach' %}
+          <th><p class="action" >已入库</p></th>
+        {% endif %}
+        </tr>
+      </header>
+    </article>
+  {% endfor %}
+  </table>
+{% endblock %}

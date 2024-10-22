@@ -1,0 +1,40 @@
+{% extends 'home.html' %}
+
+{% block header %}
+  <h1>{% block title %}收支账单{% endblock %}</h1>
+  <a class="action" href="{{ url_for('book.create') }}" style="font-size: 24px;color:pink;">进货</a>
+  <a class="action" href="{{ url_for('book.purchase_list') }}" style="font-size: 24px;color:pink;">进货清单</a>
+{% endblock %}
+
+
+
+{% block content %}
+  <table width="900px" height="100px">
+    <form id="dateRangeForm" action="/book/bill" method="post">
+        <label for="startDate">开始日期</label>
+        <input type="date" id="startDate" name="startDate" value="{{ startDate }}">
+        <label for="endDate">结束日期</label>
+        <input type="date" id="endDate" name="endDate" value="{{ endDate }}">
+        <input type="submit" name="submit" value="提交">
+    </form>
+    <tr>
+      <th>账单流水号</th>
+      <th>书籍ID</th>
+      <th>时间</th>
+      <th>数量</th>
+      <th>单价</th>
+      <th>总额</th>
+      <th>收/支</th>
+    </tr>
+  {% for post in posts %}
+    <tr>
+      <th>{{ post['billid'] }}</th>
+      <th>{{ post['bid'] }}</th>
+      <th>{{ post['time'] }}</th>
+      <th>{{ post['amount'] }}</th>
+      <th>￥{{ post['price'] }}</th>
+      <th>￥{{ (post['price'] | float) *post['amount'] }}</th>
+      <th>{{ post['b/s'] }}</th>
+    </tr>
+  {% endfor %}
+{% endblock %}

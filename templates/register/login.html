@@ -1,0 +1,32 @@
+{% extends 'home.html' %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head> 
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block header %}
+        <h1>{% block title %}{{title}}{% endblock %}</h1>
+    {% endblock %}
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='img/main.png') }}");
+            background-size: cover; /* 确保图片覆盖整个页面 */
+            /* 其他背景样式属性，如背景颜色、平铺方式等，根据需要添加 */
+        }
+    </style>
+</head>
+<body> 
+<center>
+    <h1>用户登录页面</h1> 
+    {% block content %}
+    <form method="post">
+      <label for="username">用户名</label>
+      <input type="text" name="nm" id="username" required><br>
+      <label for="password">密码</label>
+      <input type="password" name="pwd" id="password" required><br>
+      <input type="submit" value="登录">
+    </form>
+    {% endblock %}
+</center>
+</body>  
+</html>
